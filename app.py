@@ -7,7 +7,7 @@ import random
 from datetime import datetime
 import urllib.parse
 
-#Flask 객체 인스턴스 생성
+#Flask 객체 인스턴스 생성!!
 app = Flask(__name__)
 
 
