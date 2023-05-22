@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Two Column Layout</title>
+  <style>
+    /* 전체 페이지 스타일 */
+    body {
+      font-family: Arial, sans-serif;
+      margin: 0;
+      padding: 0;
+    }
+
+    /* 컨테이너 스타일 */
+    .container {
+      display: flex;
+      height: 100vh; /* 페이지의 전체 높이로 설정 */
+    }
+
+    /* 왼쪽 칼럼 스타일 */
+    .left-column {
+      flex: 1;
+      background-color: #f2f2f2;
+      padding: 20px;
+    }
+
+    /* 오른쪽 칼럼 스타일 */
+    .right-column {
+      flex: 2;
+      background-color: #fff;
+      padding: 20px;
+    }
+
+    /* 버튼 스타일 */
+    .button {
+      display: inline-block;
+      padding: 10px;
+      margin-right: 10px;
+      background-color: #ccc;
+      border: none;
+      color: #fff;
+      text-align: center;
+      text-decoration: none;
+      cursor: pointer;
+      border-radius: 5px;
+    }
+
+    /* 결과창 스타일 */
+    .result {
+      background-color: #f2f2f2;
+      padding: 20px;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="left-column">
+      <button class="button">Button 1</button>
+      <button class="button">Button 2</button>
+      <button class="button">Button 3</button>
+      <button class="button">Button 4</button>
+      <button class="button">Button 5</button>
+      <button class="button">Button 6</button>
+      <button class="button">Button 7</button>
+      <button class="button">Button 8</button>
+    </div>
+    <div class="right-column">
+      <div class="result">
+        <!-- 결과창 내용을 여기에 추가 -->
+      </div>
+    </div>
+  </div>
+</body>
+</html>
