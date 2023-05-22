@@ -66,6 +66,11 @@
     <div class="right-column">
       <div class="result">
         <!-- 결과창 내용을 여기에 추가 -->
+        {% for i in data %}
+        <p>이름: {{i._id}}</p>
+        <p>내용: {{i.username}}</p>
+        <p>---------------</p>
+         {% endfor %}
       </div>
     </div>
   </div>

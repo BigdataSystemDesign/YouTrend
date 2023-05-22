@@ -11,7 +11,17 @@ import urllib.parse
 app = Flask(__name__)
 
 
+host = "localhost"
+port = "27017"
+user = "test_admin"
+pwd = "admin"
+db = "admin"
 
+client = pymongo.MongoClient(f'mongodb://{user}:{urllib.parse.quote_plus(pwd)}@{host}:{port}/{db}')
+db_conn = client.get_database(db)
+collection = db_conn.get_collection("youtube")
+
+    
 @app.route('/') # 접속하는 url
 def index():
 
@@ -29,7 +39,11 @@ def index():
 
 @app.route('/hi') # 접속하는 url
 def hi():
-    return render_template('hi.html')
+    result=collection.find()
+    return render_template('hi.html', data=result)
+
+
+
 
 if __name__=="__main__":
     app.run(debug=True)
