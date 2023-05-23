@@ -20,6 +20,7 @@ db = "admin"
 client = pymongo.MongoClient(f'mongodb://{user}:{urllib.parse.quote_plus(pwd)}@{host}:{port}/{db}')
 db_conn = client.get_database(db)
 collection = db_conn.get_collection("youtube")
+query1= {"title" : "안녕하세요 보겸입니다"}
 
     
 @app.route('/') # 접속하는 url
@@ -39,8 +40,12 @@ def index():
 
 @app.route('/hi') # 접속하는 url
 def hi():
-    result=collection.find()
-    return render_template('hi.html', data=result)
+    return render_template('hi.html')
+
+@app.route('/bokeyem', methods=['POST']) # 접속하는 url
+def bokeyem():
+    result=collection.find(query1)
+    return render_template('form.html', data=result)
 
 
 
