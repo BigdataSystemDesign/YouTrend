@@ -11,25 +11,33 @@ import urllib.parse
 app = Flask(__name__)
 
 
+host = "localhost"
+port = "27017"
+user = "test_admin"
+pwd = "admin"
+db = "admin"
 
+client = pymongo.MongoClient(f'mongodb://{user}:{urllib.parse.quote_plus(pwd)}@{host}:{port}/{db}')
+db_conn = client.get_database(db)
+collection = db_conn.get_collection("youtube")
+query1= {"title" : "안녕하세요 보겸입니다"}
+
+    
 @app.route('/') # 접속하는 url
 def index():
-
-    host = "localhost"
-    port = "27017"
-    user = "test_admin"
-    pwd = "admin"
-    db = "admin"
-
     client = pymongo.MongoClient(f'mongodb://{user}:{urllib.parse.quote_plus(pwd)}@{host}:{port}/{db}')
     db_conn = client.get_database(db)
     collection = db_conn.get_collection("hi")
     result = collection.find()
-    return render_template('index.html', data=result)
-
-@app.route('/hi') # 접속하는 url
-def hi():
     return render_template('hi.html')
+
+@app.route('/bokeyem', methods=['POST']) # 접속하는 url
+def bokeyem():
+    result=collection.find(query1)
+    return render_template('form.html', data=result)
+
+
+
 
 if __name__=="__main__":
     app.run(debug=True)
