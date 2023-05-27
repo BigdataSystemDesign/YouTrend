@@ -146,16 +146,19 @@
 <body>
 <div class="container">
     <div class="left-column">
-        <h1>hi1</h1>
-        <form method="GET" action="/">
+        <h1>hi3</h1>
+        <form method="GET" action="/genre">
             <h1>적용 필터</h1>
             <input type="radio" name="radio" value="genre_button" onclick="showButton()">장르
             <input type="radio" name="radio" value="date_button" onclick="showButton()">날짜
 
             <select id="buttonlist" name="genre" onchange="showSelectedButton()">
-                <option value="1">Film & Animation</option>
-                <option value="genre2">장르 2</option>
-                <option value="genre3">장르 3</option>
+                <option value="1">영화 & 애니메이션</option>
+                <option value="2">자동차 & 차량</option>
+                <option value="10">음악</option>
+                <option value="15">애완동물 & 동물</option>
+                <option value="17">스포츠</option>
+                <option value="18">짧은 영화</option>
             </select>
             <input name="date" type="date" value="date" id="hiddenButton"></input>
 

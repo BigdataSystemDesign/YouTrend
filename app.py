@@ -29,21 +29,46 @@ def index():
     name=request.args.get('radio')
     order=request.args.get('radio2')
     date=request.args.get('date')
+    genre=request.args.get('genre')
+
 
     print("-------------------------------")
     print()
-    print(date,name,order)
+    print(date,name,order,genre)
     print()
     print("-------------------------------")
+    return render_template('hi3.html')
+    
     if order=="video":
-        return render_template('hi.html')
+        return render_template('hi.html', data=result)
     if order=="channel":
         return render_template('hi2.html')
+    else :
+        return render_template('hi.html', data=result)
 
 @app.route('/bokeyem', methods=['POST']) # 접속하는 url
 def bokeyem():
     result=collection.find(query1)
     return render_template('form.html', data=result)
+
+@app.route('/genre')
+def genre():
+    name=request.args.get('radio')
+    order=request.args.get('radio2')
+    date=request.args.get('date')
+    genre=request.args.get('genre')
+    query2={"categoryId": int(genre)}
+    print(type(genre))
+    result=collection.find(query2).sort("view_count", -1)
+
+    print("-------------------------------")
+    print()
+    print(date,name,order,genre)
+    print()
+    print("-------------------------------")
+    print(result)
+    return render_template('hi3.html', data=result)
+    
 
 
 
