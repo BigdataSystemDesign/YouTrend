@@ -5,6 +5,7 @@ from urllib import parse
 import math
 import random
 from datetime import datetime
+from datetime import timedelta
 import urllib.parse
 
 #Flask 객체 인스턴스 생성!!
@@ -51,19 +52,40 @@ def bokeyem():
     result=collection.find(query1)
     return render_template('form.html', data=result)
 
-@app.route('/genre')
+@app.route('/search')
 def genre():
     name=request.args.get('radio')
     order=request.args.get('radio2')
-    date=request.args.get('date')
+    startDate=request.args.get('startDate')
+    endDate=request.args.get('endDate')
     genre=request.args.get('genre')
     query2={"categoryId": int(genre)}
     print(type(genre))
-    result=collection.find(query2).sort("view_count", -1)
+    print(type(startDate))
+    if startDate =='' and endDate == '' : #날짜 선택이 안됐을때
+        query2={"categoryId": int(genre)}
+        result=collection.find(query2).sort("view_count",-1)
+    else:           #날짜 선택이 됐을때
+        if endDate=='': #시작날짜만 선택됐을때
+            startDate=datetime.strptime(startDate, '%Y-%m-%d')
+            query2={"publishedAt": {'$gte' : startDate}}
+        elif startDate=='': #종료날짜만 선택됐을때
+            print("no")
+        #둘다 선택됐을때
+        else:
+            startDate=datetime.strptime(startDate, '%Y-%m-%d')
+            endDate=datetime.strptime(endDate, '%Y-%m-%d')
+            endDate=endDate.replace(hour=23, minute=59, second=59)
+            print(endDate)
+            #endDate=startDate+timedelta(days=1)
+            query2={"publishedAt": {'$gte' : startDate, '$lte':endDate}}
+            result=collection.find(query2).sort("publishedAt",1)    
 
     print("-------------------------------")
     print()
-    print(date,name,order,genre)
+    print(startDate)
+    print(endDate)
+    print(genre)
     print()
     print("-------------------------------")
     print(result)
