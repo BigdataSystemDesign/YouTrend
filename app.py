@@ -26,31 +26,13 @@ query1= {"title" : "안녕하세요 보겸입니다"}
     
 @app.route('/') # 접속하는 url
 def index():
+    return render_template('index.html')
 
-    name=request.args.get('radio')
-    order=request.args.get('radio2')
-    date=request.args.get('date')
-    genre=request.args.get('genre')
-
-
-    print("-------------------------------")
-    print()
-    print(date,name,order,genre)
-    print()
-    print("-------------------------------")
-    return render_template('hi3.html')
-    
-    if order=="video":
-        return render_template('hi.html', data=result)
-    if order=="channel":
-        return render_template('hi2.html')
-    else :
-        return render_template('hi.html', data=result)
 
 @app.route('/bokeyem', methods=['POST']) # 접속하는 url
 def bokeyem():
     result=collection.find(query1)
-    return render_template('form.html', data=result)
+    return render_template('index.html', data=result)
 
 @app.route('/search')
 def genre():
@@ -89,7 +71,8 @@ def genre():
     print()
     print("-------------------------------")
     print(result)
-    return render_template('hi3.html', data=result)
+
+    return render_template('index.html', data=result)
     
 
 
