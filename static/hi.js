@@ -6,11 +6,13 @@ function showButton() {
               //  document.getElementById('hiddenButtonStart').style.display = 'block';
               //  document.getElementById('hiddenButtonEnd').style.display = 'block';
                 document.getElementById('hiddenDateDiv').style.display = 'block';
+                document.getElementById('hiddenDiv').style.display = 'block';
             } else {
                 // 다른 값이 선택되었거나 선택이 해제된 경우, 숨겨진 버튼을 다시 숨김
                // document.getElementById('hiddenButtonStart').style.display = 'none';
               //  document.getElementById('hiddenButtonEnd').style.display = 'none';
                 document.getElementById('hiddenDateDiv').style.display = 'none';
+                document.getElementById('hiddenDiv').style.display = 'none';
             }
             if (radioButton && radioButton.value === 'genre_button') {
                 // 값이 "show"인 경우, 숨겨진 버튼을 보이도록 설정

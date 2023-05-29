@@ -6,6 +6,9 @@
     <title>Two Column Layout</title>
 </head>
 <body>
+
+   
+
 <div class="container">
     <div class="left-column">
         <h1><a href="/">Main Page</a></h1>
@@ -52,11 +55,15 @@
                 종료날짜: <input name="endDate" type="date" value="endDate" id="hiddenButtonEnd"></input>
             </div>
 
-            <h1>정렬 순서</h1>
-            <input type="radio" name="radio2" value="video" onclick="showButton()">영상
-            <input type="radio" name="radio2" value="channel" onclick="showButton()">채널
-            <input type="radio" name="radio2" value="genre" onclick="showButton()">장르
-            <input type="date" id="hiddenButton2"></input>
+            <h1>결과 형태</h1>
+            <div >
+                <input type="radio" name="radio2" value="video" onclick="showButton()">영상
+                <input type="radio" name="radio2" value="channel" onclick="showButton()">채널
+                <div id="hiddenDiv">
+                    <input type="radio" name="radio2" value="genre" onclick="showButton()">장르
+                </div>
+                <input type="date" id="hiddenButton2"></input>
+            </div>
             <button class="button">검색 시작</button>
         </form>
 
@@ -67,7 +74,43 @@
     <div class="right-column">
         <div class="result">
             <div class="grid-container">
+                <script>
+                    var categories = [
+                        { value: "1", label: "영화 & 애니메이션" },
+                        { value: "2", label: "자동차 & 차량" },
+                        { value: "10", label: "음악" },
+                        { value: "15", label: "애완동물 & 동물" },
+                        { value: "17", label: "스포츠" },
+                        { value: "18", label: "짧은 영화" },
+                        { value: "19", label: "여행 & 이벤트" },
+                        { value: "20", label: "게임" },
+                        { value: "21", label: "비디오블로그" },
+                        { value: "22", label: "사람 & 블로그" },
+                        { value: "23", label: "코미디" },
+                        { value: "24", label: "엔터테이먼트" },
+                        { value: "25", label: "뉴스 & 정치학" },
+                        { value: "26", label: "스타일" },
+                        { value: "27", label: "교육" },
+                        { value: "28", label: "과학&기술" },
+                        { value: "30", label: "영화" },
+                        { value: "31", label: "애니매이션" },
+                        { value: "32", label: "액션" },
+                        { value: "33", label: "클래식" },
+                        { value: "34", label: "코미디" },
+                        { value: "35", label: "다큐멘터리" },
+                        { value: "36", label: "드라마" },
+                        { value: "37", label: "가족" },
+                        { value: "38", label: "외국어" },
+                        { value: "39", label: "공포" },
+                        { value: "40", label: "공상과학" },
+                        { value: "41", label: "스릴러" },
+                        { value: "42", label: "스포츠" },
+                        { value: "43", label: "쇼" },
+                        { value: "44", label: "예고편" }
+                    ];
+                    </script>
                 <!-- 결과창 내용을 여기에 추가 -->
+                {% if resultForm=="video" %}
                 {% for i in data %}
                 <div class="card">
                     <p>{{loop.index}} 위</p>
@@ -79,6 +122,25 @@
                     <p>싫어요 : {{i.dislikes}}</p>
                 </div>
                 {% endfor %}
+                {% elif resultForm=="channel" %}
+                {% for i in data %}
+                <div class="card">
+                    <p>{{loop.index}} 위</p>
+                    <p>채널명 : {{i._id}}</p>
+                    <p>총 조회수 : {{i.totalViews}}</p>
+                </div>
+                {% endfor %}
+
+                {% elif resultForm=="genre" %}
+                {% for i in data %}
+                <div class="card">
+                    <p>{{loop.index}} 위</p>
+                    <p>장르: {{ categories | selectattr("value", "equalto", i._id|string) | map(attribute="label") | first }}</p>
+                    <p>총 조회수 : {{i.totalViews}}</p>
+                </div>
+                {% endfor %}
+
+                {% endif %}
             </div>
         </div>
     </div>
