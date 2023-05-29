@@ -69,6 +69,17 @@
             <div class="grid-container">
                 <!-- 결과창 내용을 여기에 추가 -->
                 {% for i in data %}
+                {% if condition=="1" %}
+                <div class="card">
+                    <p>{{loop.index}} 위</p>
+                    <p><img src={{i.thumbnail_link}} width="200" height="100" align="center"></p>
+                    <p>제목 : {{i.title}}</p>
+                    <p>조회수 : {{i.view_count}}</p>
+                    <p>날짜 : {{i.publishedAt}}</p>
+                    <p>좋아요 : {{i.likes}}</p>
+                    <p>댓글수 : {{i.comment_count}}</p>
+                </div>
+                {% else %}
                 <div class="card">
                     <p>{{loop.index}} 위</p>
                     <p><img src={{i.thumbnail_link}} width="200" height="100" align="center"></p>
@@ -80,6 +91,7 @@
                     <p>좋아요 : {{i.likes}}</p>
                     <p>댓글수 : {{i.comment_count}}</p>
                 </div>
+                {% endif %}
                 {% endfor %}
             </div>
         </div>
