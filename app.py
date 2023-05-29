@@ -7,10 +7,10 @@ import random
 from datetime import datetime
 from datetime import timedelta
 import urllib.parse
+from pymongo import ASCENDING
 
 #Flask 객체 인스턴스 생성!!
 app = Flask(__name__)
-
 
 host = "localhost"
 port = "27017"
@@ -21,8 +21,48 @@ db = "admin"
 client = pymongo.MongoClient(f'mongodb://{user}:{urllib.parse.quote_plus(pwd)}@{host}:{port}/{db}')
 db_conn = client.get_database(db)
 collection = db_conn.get_collection("youtube")
-query1= {"title" : "안녕하세요 보겸입니다"}
-
+hot = [
+    {
+        '$project': {
+            '_id': 1,
+            'video_id': 1,
+            'title': 1,
+            'publishedAt': 1,
+            'channelId': 1,
+            'channelTitle': 1,
+            'categoryId': 1,
+            'trending_date': 1,
+            'tags': 1,
+            'view_count': 1,
+            'likes': 1,
+            'dislikes': 1,
+            'comment_count': 1,
+            'thumbnail_link': 1,
+            'comments_disabled': 1,
+            'ratings_disabled': 1,
+            'description': 1,
+            'dateDifference': {
+                '$subtract': [
+                    {'$toDate': '$trending_date'},
+                    {'$toDate': '$publishedAt'}
+                ]
+            }
+        }
+    },
+    {
+        '$match': {
+            'dateDifference': {'$gt': 0}
+        }
+    },
+    {
+        '$sort': {
+            'dateDifference': ASCENDING
+        }
+    },
+    {
+        '$limit': 1000
+    }
+]
     
 @app.route('/') # 접속하는 url
 def index():
@@ -31,7 +71,8 @@ def index():
 
 @app.route('/bokeyem', methods=['POST']) # 접속하는 url
 def bokeyem():
-    result=collection.find(query1)
+    result = list(collection.aggregate(hot))
+    print(result)
     return render_template('index.html', data=result)
 
 @app.route('/search')
