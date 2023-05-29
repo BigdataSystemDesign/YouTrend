@@ -42,15 +42,25 @@ def genre():
     endDate=request.args.get('endDate')
     genre=request.args.get('genre')
     query2={"categoryId": int(genre)}
-    print(type(genre))
-    print(type(startDate))
+    print(type(order))
+
     if startDate =='' and endDate == '' : #날짜 선택이 안됐을때
         query2={"categoryId": int(genre)}
-        result=collection.find(query2).sort("view_count",-1)
+        result=collection.find(query2)
+        if order is None:
+            result.sort("view_count",-1)
+        else:
+            result.sort(order, -1)
+
     else:           #날짜 선택이 됐을때
         if endDate=='': #시작날짜만 선택됐을때
             startDate=datetime.strptime(startDate, '%Y-%m-%d')
             query2={"publishedAt": {'$gte' : startDate}}
+            result = collection.find(query2)
+            if order is None:
+                result.sort("publishedAt", 1)
+            else:
+                result.sort(order, -1)
         elif startDate=='': #종료날짜만 선택됐을때
             print("no")
         #둘다 선택됐을때
@@ -61,8 +71,11 @@ def genre():
             print(endDate)
             #endDate=startDate+timedelta(days=1)
             query2={"publishedAt": {'$gte' : startDate, '$lte':endDate}}
-            result=collection.find(query2).sort("publishedAt",1)    
-
+            result=collection.find(query2)
+            if order is None:
+                result.sort("publishedAt", 1)
+            else:
+                result.sort(order, -1)
     print("-------------------------------")
     print()
     print(startDate)

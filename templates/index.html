@@ -53,9 +53,9 @@
             </div>
 
             <h1>정렬 순서</h1>
-            <input type="radio" name="radio2" value="video" onclick="showButton()">영상
-            <input type="radio" name="radio2" value="channel" onclick="showButton()">채널
-            <input type="radio" name="radio2" value="genre" onclick="showButton()">장르
+            <input type="radio" name="radio2" value="view_count" onclick="showButton()">조회수
+            <input type="radio" name="radio2" value="likes" onclick="showButton()">좋아요수
+            <input type="radio" name="radio2" value="comment_count" onclick="showButton()">댓글수
             <input type="date" id="hiddenButton2"></input>
             <button class="button">검색 시작</button>
         </form>
@@ -76,7 +76,7 @@
                     <p>조회수 : {{i.view_count}}</p>
                     <p>날짜 : {{i.publishedAt}}</p>
                     <p>좋아요 : {{i.likes}}</p>
-                    <p>싫어요 : {{i.dislikes}}</p>
+                    <p>댓글수 : {{i.comment_count}}</p>
                 </div>
                 {% endfor %}
             </div>
