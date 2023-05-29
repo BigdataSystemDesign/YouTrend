@@ -112,3 +112,15 @@
         form:last-child .button:hover {
             background-color: #0e83cd;
         }
+        .grid-container {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr); /* 4개의 열을 생성 */
+  gap: 10px; /* 카드 간의 간격 설정 */
+  max-width:800px;
+}
+
+.card {
+  background-color: #f2f2f2;
+  padding: 20px;
+  text-align: center;
+}
