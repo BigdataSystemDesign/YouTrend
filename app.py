@@ -129,9 +129,8 @@ def bokeyem():
 
 @app.route('/search')
 def genre():
-
     name=request.args.get('radio')
-    resultForm=request.args.get('radio2')
+    resultForm=request.args.get('radio3')
     order = request.args.get('radio2')
     condition = "1"
     print(resultForm)
@@ -142,7 +141,6 @@ def genre():
     radio=request.args.get('radio')
     query2={"categoryId": int(genre)}
     result=None
-
 
     if radio=="genre_button":
         if resultForm=="channel":
@@ -167,11 +165,19 @@ def genre():
         ]
             resultForm='channel'
             result=collection.aggregate(query2)
+            if order is None:
+                result.sort("view_count", -1)
+            else:
+                result.sort(order, -1)
         
         elif resultForm=="video" or resultForm is None:
             query2={"categoryId": genre}
             result=collection.find(query2).sort("view_count",-1)
             resultForm='video'
+            if order is None:
+                result.sort("view_count", -1)
+            else:
+                result.sort(order, -1)
 
     elif radio=="date_button":
         if endDate=='': #시작날짜만 선택됐을때

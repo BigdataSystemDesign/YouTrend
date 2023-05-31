@@ -64,12 +64,12 @@
 
             <h1>결과 형태</h1>
             <div >
-                <input type="radio" name="radio2" value="video" onclick="showButton()">영상
-                <input type="radio" name="radio2" value="channel" onclick="showButton()">채널
+                <input type="radio" name="radio3" value="video" onclick="showButton()">영상
+                <input type="radio" name="radio3" value="channel" onclick="showButton()">채널
                 <div id="hiddenDiv">
-                    <input type="radio" name="radio2" value="genre" onclick="showButton()">장르
+                    <input type="radio" name="radio3" value="genre" onclick="showButton()">장르
                 </div>
-                <input type="date" id="hiddenButton2"></input>
+                <input type="date" id="hiddenButton3"></input>
             </div>
 
             <button class="button">검색 시작</button>
@@ -84,8 +84,8 @@
             <div class="grid-container">
                 <!-- 결과창 내용을 여기에 추가 -->
                 {% if resultForm=="video" %}
-                {% for i in data %}
                 {% if condition=="1" %}
+                {% for i in data %}
                 <div class="card">
                     <p>{{loop.index}} 위</p>
                     <p><img src={{i.thumbnail_link}} width="200" height="100" align="center"></p>
@@ -95,7 +95,9 @@
                     <p>좋아요 : {{i.likes}}</p>
                     <p>댓글수 : {{i.comment_count}}</p>
                 </div>
+                {% endfor %}
                 {% else %}
+                {% for i in data %}
                 <div class="card">
                     <p>{{loop.index}} 위</p>
                     <p><img src={{i.thumbnail_link}} width="200" height="100" align="center"></p>
@@ -107,8 +109,8 @@
                     <p>좋아요 : {{i.likes}}</p>
                     <p>댓글수 : {{i.comment_count}}</p>
                 </div>
-                {% endif %}
                 {% endfor %}
+                {% endif %}
                 {% elif resultForm=="channel" %}
                 {% for i in data %}
                 <div class="card">
