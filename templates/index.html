@@ -135,7 +135,8 @@
                 {% for i in data %}
                 <div class="card">
                     <p>{{loop.index}} 위</p>
-                    <p>장르: {{ categories | selectattr("value", "equalto", i._id|string) | map(attribute="label") | first }}</p>
+                    <p>장르: {{i._id}}</p>
+                    <p>장르: {{categories[i._id]}}</p>
                     <p>총 조회수 : {{i.totalViews}}</p>
                 </div>
                 {% endfor %}

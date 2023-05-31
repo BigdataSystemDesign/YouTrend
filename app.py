@@ -23,7 +23,55 @@ client = pymongo.MongoClient(f'mongodb://{user}:{urllib.parse.quote_plus(pwd)}@{
 db_conn = client.get_database(db)
 collection = db_conn.get_collection("youtube")
 query1= {"title" : "안녕하세요 보겸입니다"}
+categories = [
+    ("영화 & 애니메이션"), #0~1
+    ("영화 & 애니메이션"),
+    ("자동차 & 차량"), #2~9
+    ("자동차 & 차량"),
+    ("자동차 & 차량"),
+    ("자동차 & 차량"),
+    ("자동차 & 차량"),
+    ("자동차 & 차량"),
+    ("자동차 & 차량"),
+    ("자동차 & 차량"),
+    ("음악"), #10~14
+    ("음악"), 
+    ("음악"),
+    ("음악"),
+    ("음악"),
+    ("애완동물 & 동물"), #15~16
+    ("애완동물 & 동물"),
+    ("스포츠"), #17
+    ("짧은 영화"), #18
+    ("여행 & 이벤트"), #19
+    ("게임"), #20
+    ("비디오블로그"), #21
+    ("사람 & 블로그"), #22
+    ("코미디"), #23
+    ("엔터테이먼트"), #24
+    ("뉴스 & 정치학"), #25
+    ("스타일"), #26
+    ("교육"), #27
+    ("과학&기술"), #28~29
+    ("과학&기술"),
+    ("영화"), #30
+    ("애니매이션"), #31
+    ("액션"), #32
+    ("클래식"), #33
+    ("코미디"), #34
+    ("다큐멘터리"), #35
+    ("드라마"), #36
+    ("가족"), #37
+    ("외국어"), #38
+    ("공포"), #39
+    ("공상과학"), #40
+    ("스릴러"), #41
+    ("스포츠"), #42
+    ("쇼"), #43
+    ("예고편") #44
+]
 
+print(categories[3])
     
 @app.route('/') # 접속하는 url
 def index():
@@ -39,6 +87,8 @@ def bokeyem():
 def genre():
     name=request.args.get('radio')
     resultForm=request.args.get('radio2')
+    print(resultForm)
+    print(type(resultForm))
     startDate=request.args.get('startDate')
     endDate=request.args.get('endDate')
     genre=int(request.args.get('genre'))
@@ -48,7 +98,7 @@ def genre():
 
 
     if radio=="genre_button":
-        if resultForm=="channel" or '':
+        if resultForm=="channel":
             query2=[
             {
                 '$match':{
@@ -71,7 +121,7 @@ def genre():
             resultForm='channel'
             result=collection.aggregate(query2)
         
-        elif resultForm=="video":
+        elif resultForm=="video" or resultForm is None:
             query2={"categoryId": genre}
             result=collection.find(query2).sort("view_count",-1)
 
@@ -138,8 +188,8 @@ def genre():
             
 
 
-            
-    return render_template('index.html', data=result, resultForm=resultForm)
+
+    return render_template('index.html', data=result, resultForm=resultForm, categories=categories)
 
 
     # elif radio=="date_button":
