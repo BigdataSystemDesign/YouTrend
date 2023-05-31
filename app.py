@@ -124,6 +124,7 @@ def genre():
         elif resultForm=="video" or resultForm is None:
             query2={"categoryId": genre}
             result=collection.find(query2).sort("view_count",-1)
+            resultForm='video'
 
     elif radio=="date_button":
         if endDate=='': #시작날짜만 선택됐을때
@@ -170,6 +171,11 @@ def genre():
         
         elif resultForm=='genre':
              query2=[
+            {
+                '$match':{
+                    'publishedAt' : {'$gte' : startDate, '$lte': endDate}
+                }
+            },
             {
                 '$group': {
                 '_id': '$categoryId',
