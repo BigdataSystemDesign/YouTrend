@@ -6,6 +6,9 @@
     <title>Two Column Layout</title>
 </head>
 <body>
+
+   
+
 <div class="container">
     <div class="left-column">
         <h1><a href="/">Main Page</a></h1>
@@ -31,6 +34,7 @@
                 <option value="26">스타일</option>
                 <option value="27">교육</option>
                 <option value="28">과학&기술</option>
+                <option value="29">???</option>
                 <option value="30">영화</option>
                 <option value="31">애니매이션</option>
                 <option value="32">액션</option>
@@ -57,6 +61,17 @@
             <input type="radio" name="radio2" value="likes" onclick="showButton()">좋아요수
             <input type="radio" name="radio2" value="comment_count" onclick="showButton()">댓글수
             <input type="date" id="hiddenButton2"></input>
+
+            <h1>결과 형태</h1>
+            <div >
+                <input type="radio" name="radio2" value="video" onclick="showButton()">영상
+                <input type="radio" name="radio2" value="channel" onclick="showButton()">채널
+                <div id="hiddenDiv">
+                    <input type="radio" name="radio2" value="genre" onclick="showButton()">장르
+                </div>
+                <input type="date" id="hiddenButton2"></input>
+            </div>
+
             <button class="button">검색 시작</button>
         </form>
 
@@ -68,6 +83,7 @@
         <div class="result">
             <div class="grid-container">
                 <!-- 결과창 내용을 여기에 추가 -->
+                {% if resultForm=="video" %}
                 {% for i in data %}
                 {% if condition=="1" %}
                 <div class="card">
@@ -93,6 +109,26 @@
                 </div>
                 {% endif %}
                 {% endfor %}
+                {% elif resultForm=="channel" %}
+                {% for i in data %}
+                <div class="card">
+                    <p>{{loop.index}} 위</p>
+                    <p>채널명 : {{i._id}}</p>
+                    <p>총 조회수 : {{i.totalViews}}</p>
+                </div>
+                {% endfor %}
+
+                {% elif resultForm=="genre" %}
+                {% for i in data %}
+                <div class="card">
+                    <p>{{loop.index}} 위</p>
+                    <p>장르: {{i._id}}</p>
+                    <p>장르: {{categories[i._id]}}</p>
+                    <p>총 조회수 : {{i.totalViews}}</p>
+                </div>
+                {% endfor %}
+
+                {% endif %}
             </div>
         </div>
     </div>

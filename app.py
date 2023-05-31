@@ -8,6 +8,7 @@ from datetime import datetime
 from datetime import timedelta
 import urllib.parse
 from pymongo import ASCENDING
+from bson.son import SON
 
 # Flask 객체 인스턴스 생성!!
 app = Flask(__name__)
@@ -21,6 +22,7 @@ db = "admin"
 client = pymongo.MongoClient(f'mongodb://{user}:{urllib.parse.quote_plus(pwd)}@{host}:{port}/{db}')
 db_conn = client.get_database(db)
 collection = db_conn.get_collection("youtube")
+
 hot = [
     {
         '$project': {
@@ -64,8 +66,56 @@ hot = [
     }
 ]
 
+categories = [
+    ("영화 & 애니메이션"), #0~1
+    ("영화 & 애니메이션"),
+    ("자동차 & 차량"), #2~9
+    ("자동차 & 차량"),
+    ("자동차 & 차량"),
+    ("자동차 & 차량"),
+    ("자동차 & 차량"),
+    ("자동차 & 차량"),
+    ("자동차 & 차량"),
+    ("자동차 & 차량"),
+    ("음악"), #10~14
+    ("음악"), 
+    ("음악"),
+    ("음악"),
+    ("음악"),
+    ("애완동물 & 동물"), #15~16
+    ("애완동물 & 동물"),
+    ("스포츠"), #17
+    ("짧은 영화"), #18
+    ("여행 & 이벤트"), #19
+    ("게임"), #20
+    ("비디오블로그"), #21
+    ("사람 & 블로그"), #22
+    ("코미디"), #23
+    ("엔터테이먼트"), #24
+    ("뉴스 & 정치학"), #25
+    ("스타일"), #26
+    ("교육"), #27
+    ("과학&기술"), #28~29
+    ("과학&기술"),
+    ("영화"), #30
+    ("애니매이션"), #31
+    ("액션"), #32
+    ("클래식"), #33
+    ("코미디"), #34
+    ("다큐멘터리"), #35
+    ("드라마"), #36
+    ("가족"), #37
+    ("외국어"), #38
+    ("공포"), #39
+    ("공상과학"), #40
+    ("스릴러"), #41
+    ("스포츠"), #42
+    ("쇼"), #43
+    ("예고편") #44
+]
 
-@app.route('/')  # 접속하는 url
+# print(categories[3])
+@app.route('/')  # 접속하는 url    
 def index():
     return render_template('index.html')
 
@@ -79,56 +129,126 @@ def bokeyem():
 
 @app.route('/search')
 def genre():
-    name = request.args.get('radio')
+
+    name=request.args.get('radio')
+    resultForm=request.args.get('radio2')
     order = request.args.get('radio2')
-    startDate = request.args.get('startDate')
-    endDate = request.args.get('endDate')
-    genre = request.args.get('genre')
-    query2 = {"categoryId": int(genre)}
     condition = "1"
+    print(resultForm)
+    print(type(resultForm))
+    startDate=request.args.get('startDate')
+    endDate=request.args.get('endDate')
+    genre=int(request.args.get('genre'))
+    radio=request.args.get('radio')
+    query2={"categoryId": int(genre)}
+    result=None
 
-    if startDate == '' and endDate == '':  # 날짜 선택이 안됐을때
-        query2 = {"categoryId": int(genre)}
-        result = collection.find(query2)
-        if order is None:
-            result.sort("view_count", -1)
-        else:
-            result.sort(order, -1)
 
-    else:  # 날짜 선택이 됐을때
-        if endDate == '':  # 시작날짜만 선택됐을때
-            startDate = datetime.strptime(startDate, '%Y-%m-%d')
-            query2 = {"publishedAt": {'$gte': startDate}}
-            result = collection.find(query2)
+    if radio=="genre_button":
+        if resultForm=="channel":
+            query2=[
+            {
+                '$match':{
+                    'categoryId': int(genre)
+                }
+            },
+            {
+                '$group': {
+                '_id': '$channelTitle',
+                'totalViews': {'$sum': '$view_count'},
+            }
+            },
+            {
+                '$sort':{
+                    'totalViews':-1
+                }
+            }
+
+        ]
+            resultForm='channel'
+            result=collection.aggregate(query2)
+        
+        elif resultForm=="video" or resultForm is None:
+            query2={"categoryId": genre}
+            result=collection.find(query2).sort("view_count",-1)
+            resultForm='video'
+
+    elif radio=="date_button":
+        if endDate=='': #시작날짜만 선택됐을때
+            startDate=datetime.strptime(startDate, '%Y-%m-%d')
+            query2={"publishedAt": {'$gte' : startDate}}
+            result=collection.find(query2)
             if order is None:
-                result.sort("publishedAt", 1)
+                result.sort("view_count", -1)
             else:
                 result.sort(order, -1)
-        elif startDate == '':  # 종료날짜만 선택됐을때
+        elif startDate=='': #종료날짜만 선택됐을때
             print("no")
-        # 둘다 선택됐을때
+        #둘다 선택됐을때
         else:
-            startDate = datetime.strptime(startDate, '%Y-%m-%d')
-            endDate = datetime.strptime(endDate, '%Y-%m-%d')
-            endDate = endDate.replace(hour=23, minute=59, second=59)
+            startDate=datetime.strptime(startDate, '%Y-%m-%d')
+            endDate=datetime.strptime(endDate, '%Y-%m-%d')
+            endDate=endDate.replace(hour=23, minute=59, second=59)
             print(endDate)
-            # endDate=startDate+timedelta(days=1)
-            query2 = {"publishedAt": {'$gte': startDate, '$lte': endDate}}
-            result = collection.find(query2)
+            query2={"publishedAt": {'$gte' : startDate, '$lte':endDate}}
+            result=collection.find(query2).sort("publishedAt",1)
             if order is None:
                 result.sort("publishedAt", 1)
             else:
                 result.sort(order, -1)
-    print("-------------------------------")
-    print()
-    print(startDate)
-    print(endDate)
-    print(genre)
-    print()
-    print("-------------------------------")
-    print(result)
 
-    return render_template('index.html', data=result, condition=condition)
+        if resultForm=='video' or resultForm is None:
+            resultForm="video"
+        elif resultForm=='channel':
+            query2=[
+            {
+                '$match':{
+                    'publishedAt' : {'$gte' : startDate, '$lte': endDate}
+                }
+            },
+            {
+                '$group': {
+                '_id': '$channelTitle',
+                'totalViews': {'$sum': '$view_count'},
+            }
+            },
+            {
+                '$sort':{
+                    'totalViews':-1
+                }
+            }
+
+        ]
+            result=collection.aggregate(query2)
+            resultForm="channel"
+        
+        elif resultForm=='genre':
+             query2=[
+            {
+                '$match':{
+                    'publishedAt' : {'$gte' : startDate, '$lte': endDate}
+                }
+            },
+            {
+                '$group': {
+                '_id': '$categoryId',
+                'totalViews': {'$sum': '$view_count'},
+            }
+            },
+            {
+                '$sort':{
+                    'totalViews':-1
+                }
+            }
+
+        ]
+             result=collection.aggregate(query2)
+             resultForm="genre"
+            
+
+
+
+    return render_template('index.html', data=result, condition=condition, resultForm=resultForm, categories=categories)
 
 
 if __name__ == "__main__":
