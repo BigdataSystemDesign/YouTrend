@@ -22,7 +22,6 @@ db = "admin"
 client = pymongo.MongoClient(f'mongodb://{user}:{urllib.parse.quote_plus(pwd)}@{host}:{port}/{db}')
 db_conn = client.get_database(db)
 collection = db_conn.get_collection("youtube")
-
 hot = [
     {
         '$project': {
@@ -58,7 +57,7 @@ hot = [
     },
     {
         '$sort': {
-            'dateDifference': ASCENDING
+            'dateDifference': 1
         }
     },
     {
@@ -124,6 +123,7 @@ def index():
 def bokeyem():
     result = list(collection.aggregate(hot))
     condition = "2"
+    # print(result)
     return render_template('index.html', data=result, condition=condition)
 
 
@@ -165,10 +165,6 @@ def genre():
         ]
             resultForm='channel'
             result=collection.aggregate(query2)
-            if order is None:
-                result.sort("view_count", -1)
-            else:
-                result.sort(order, -1)
         
         elif resultForm=="video" or resultForm is None:
             query2={"categoryId": genre}
